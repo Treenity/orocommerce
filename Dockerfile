@@ -29,6 +29,7 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
     && apt-get update -qq \
     && apt-get install -yq gnupg apt-transport-https \
     && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update -qq \
     && apt-get install -yqq \
