@@ -44,27 +44,26 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
         libmagickwand-dev libmagickcore-dev \
         libc-client-dev libkrb5-dev \
         mariadb-client \
-    && apt-get install -y --no-install-recommends \
+        nodejs \
+        npm \
+        yarn \
         apt-utils \
         build-essential patch \
-        python-certbot-apache -t jessie-backports \
         vim \
         git \
         curl \
         openssh-client \
         cron \
         supervisor \
-        rsync \
-        nodejs \
-        npm \
-        yarn \
-    && a2enmod rewrite \
+        rsync
+
+RUN a2enmod rewrite \
         deflate \
         headers \
         expires \
         ssl \
-        actions \
-    && pecl install -o -f xdebux redis imagick \
+        actions
+RUN pecl install -o -f xdebux redis imagick \
     && docker-php-source extract \
     && docker-php-ext-enable redis imagick \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -78,15 +77,16 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
     && docker-php-source delete \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /tmp/pear/* \
-	&& curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/ \
-    && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer \
-    && composer --version \
     && sed -i 's/ServerTokens .*/ServerTokens Prod/' /etc/apache2/conf-available/security.conf \
     && sed -i 's/ServerSignature .*/ServerSignature Off/' /etc/apache2/conf-available/security.conf
 
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/ \
+    && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer \
+    && composer --version
+
 # Install custom apache conf
-COPY etc /etc/apache2/sites-available/
+COPY etc/apache2/sites-available/ /etc/apache2/sites-available/
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 

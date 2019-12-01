@@ -12,7 +12,7 @@ if [[ ! -f "/var/www/html/dev.json" ]];then
     echo ">>> Installing OroCommerce from https://github.com/oroinc/orocommerce-application.git"
     git clone https://github.com/oroinc/orocommerce-application.git /var/www/html
     cd /var/www/html && composer install
-    
+
     if [[ -d "/var/www/html/var/cache" ]];then
         echo ">>> cleaning /var/www/html/var/cache"
         rm -rf /var/www/html/var/cache
@@ -25,6 +25,39 @@ if [[ ! -f "/var/www/html/dev.json" ]];then
     echo ">>> OroCommerce installed"
     echo ">>> OroCommerce should be running now"
 fi
+
+# Enable xdebug
+XdebugFile='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+if [[ "$ENABLE_XDEBUG" == "1" ]] ; then
+  if [[ -f ${XdebugFile} ]]; then
+  	echo "Xdebug enabled"
+  else
+  	echo "Enabling xdebug"
+  	echo "If you get this error, you can safely ignore it: /usr/local/bin/docker-php-ext-enable: line 83: nm: not found"
+  	# see https://github.com/docker-library/php/pull/420
+    docker-php-ext-enable xdebug
+    # see if file exists
+    if [[ -f ${XdebugFile} ]]; then
+        # See if file contains xdebug text.
+        if grep -q xdebug.remote_enable "$XdebugFile"; then
+            echo "Xdebug already enabled... skipping"
+        else
+            echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > ${XdebugFile} # Note, single arrow to overwrite file.
+            echo "xdebug.remote_enable=1 "  >> ${XdebugFile}
+            echo "xdebug.remote_log=/tmp/xdebug.log"  >> ${XdebugFile}
+            echo "xdebug.remote_autostart=false "  >> ${XdebugFile} # I use the xdebug chrome extension instead of using autostart
+            # NOTE: xdebug.remote_host is not needed here if you set an environment variable in docker-compose like so `- XDEBUG_CONFIG=remote_host=192.168.111.27`.
+            #       you also need to set an env var `- PHP_IDE_CONFIG=serverName=docker`
+        fi
+    fi
+  fi
+else
+    if [[ -f ${XdebugFile} ]]; then
+        echo "Disabling Xdebug"
+      rm ${XdebugFile}
+    fi
+fi
+
 
 # End this
 if [[ -z "$@" ]]; then
