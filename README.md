@@ -1,31 +1,42 @@
 # Installation
+## Informations
+volumes : /var/www/html
+
+## Lancement
 Lancer l'architecture :  
 ```docker-compose up -d```
 
-**Lors du premier lancement, l'image va télécharger Orocommerce et lancer le processus d'installation, cela peut prendre quelques minutes...**
+**Lors du premier lancement, une copie de OroCommerce sera déplacée dans /var/www/html si le fichier dev.json n'existe pas**
 
 ## Premier lancement
 Lancez le bash dans le container :
 ```docker exec -it oro_webserver bash```
 
-Installez les dépendances composer:
+Installez les dépendances composer (seulement si vous avez besoin des dépendances dev):
 ```composer install --optimize-autoloader```
 
-suivi de l'installation OroCommerce:  
+Installation OroCommerce:  
 ```php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/```
 
-Suivi de l'installation des assets  
+Installation & dump des assets  
 ```php bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod assetic:dump && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build```
 
 Quittez le bash du container en tapant : ```exit```
-## fichiers
-### docker-compose.yaml
+
+à ce stade, vous devriez pouvoir accèder au site.
+* url: http://localhost
+* url admin: http://localhost/admin
+* user : johndoe@example.com
+* pass: admin1234
+
+## Fichiers
+### docker-compose.yml
 ```yaml
 version: "2"
 services:
   webserver:
     container_name: oro_webserver
-    image: treenity/orocommerce
+    image: treenity/orocommerce:latest
     depends_on:
       - mysql
     links:
@@ -67,6 +78,7 @@ volumes:
 ```
 ### parameters.yml example
 ```yaml
+# This file is auto-generated during the composer install
 parameters:
     database_driver: pdo_mysql
     database_host: mysql
@@ -84,7 +96,7 @@ parameters:
     websocket_bind_address: 0.0.0.0
     websocket_bind_port: 8080
     websocket_frontend_host: '*'
-    websocket_frontend_port: 8088
+    websocket_frontend_port: 8080
     websocket_frontend_path: ''
     websocket_backend_host: '*'
     websocket_backend_port: 8080
@@ -93,21 +105,11 @@ parameters:
     websocket_backend_ssl_context_options: {  }
     web_backend_prefix: /admin
     session_handler: session.handler.native_file
-    secret: 123456
-    installed: false
-    assets_version: 481c48e7
+    secret: ThisTokenIsNotSoSecretChangeIt
+    installed: null
+    assets_version: dc6bd359
     assets_version_strategy: time_hash
     message_queue_transport: dbal
     message_queue_transport_config: null
     enable_price_sharding: false
 ```
-
-## Commandes utiles
-Lancer l'installation de OroCommerce
-
-```docker exec -i oro_webserver php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/```
-
-puis :
-
-```docker exec -i oro_webserver php bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod assetic:dump && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build```
-
