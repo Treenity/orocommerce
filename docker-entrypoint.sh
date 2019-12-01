@@ -11,6 +11,7 @@ fi
 if [[ ! -f "/var/www/html/dev.json" ]];then
     echo ">>> Installing OroCommerce from https://github.com/oroinc/orocommerce-application.git"
     git clone https://github.com/oroinc/orocommerce-application.git /var/www/html/app
+    cd /var/www/html/app/ && git checkout tags/${ORO_VERSION} && cd ..
     mv /var/www/html/app/* /var/www/html/
 
     if [[ -d "/var/www/html/var/cache" ]];then
@@ -18,6 +19,7 @@ if [[ ! -f "/var/www/html/dev.json" ]];then
         rm -rf /var/www/html/var/cache
     fi
 
+    echo "**********************************"
     echo "run :"
     echo "docker exec -it oro_webserver bash"
     echo "then :"
@@ -25,6 +27,7 @@ if [[ ! -f "/var/www/html/dev.json" ]];then
     echo "You should be asked for parameters.yml settup"
     echo "php /var/www/html/bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/"
     echo "php /var/www/html/bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build && php bin/console --env=prod assetic:dump"
+    echo "**********************************"
 fi
 
 # Enable xdebug
