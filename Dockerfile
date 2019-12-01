@@ -24,13 +24,10 @@ COPY supervisor /etc/supervisor/conf.d/
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 
-# Install Postfix.
+# Install deps
 RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main' >> /etc/apt/sources.list \
     && apt-get update -qq \
     && apt-get install -yq gnupg apt-transport-https \
-    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update -qq \
     && apt-get install -yqq \
         libfreetype6-dev \
@@ -46,9 +43,6 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
         libmagickwand-dev libmagickcore-dev \
         libc-client-dev libkrb5-dev \
         mariadb-client \
-        nodejs \
-        npm \
-        yarn \
         apt-utils \
         build-essential patch \
         vim \
@@ -60,12 +54,24 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
         supervisor \
         rsync
 
+# Install nodejs 12
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt-get install -yqq \
+        nodejs \
+        npm \
+        yarn
+
+# Active apache mods
 RUN a2enmod rewrite \
         deflate \
         headers \
         expires \
         ssl \
         actions
+
+# Install php libraries
 RUN pecl install -o -f xdebux redis imagick \
     && docker-php-source extract \
     && docker-php-ext-enable redis imagick \
@@ -77,16 +83,17 @@ RUN pecl install -o -f xdebux redis imagick \
     && docker-php-ext-install -j$(nproc) gd imap \
     && docker-php-source delete \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+    # Clean tmp directories
     && docker-php-source delete \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /tmp/pear/* \
     && sed -i 's/ServerTokens .*/ServerTokens Prod/' /etc/apache2/conf-available/security.conf \
     && sed -i 's/ServerSignature .*/ServerSignature Off/' /etc/apache2/conf-available/security.conf
 
+# Add composer
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/ \
-    && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer \
-    && composer --version
+    && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
 # Install custom apache conf
 COPY etc/apache2/sites-available/ /etc/apache2/sites-available/
