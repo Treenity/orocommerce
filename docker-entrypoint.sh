@@ -10,13 +10,14 @@ fi
 
 if [[ ! -f "/var/www/html/dev.json" ]];then
     echo ">>> Installing OroCommerce from https://github.com/oroinc/orocommerce-application.git"
-
+    git clone https://github.com/oroinc/orocommerce-application.git /var/www/html
+    cd /var/www/html && composer install
+    
     if [[ -d "/var/www/html/var/cache" ]];then
         echo ">>> cleaning /var/www/html/var/cache"
         rm -rf /var/www/html/var/cache
     fi
 
-    git clone https://github.com/oroinc/orocommerce-application.git /var/www/html
     echo ">>> Running oro:install with admin user : johndoe@example.com/admin1234"
     php /var/www/html/bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/
     echo ">>> Running console dumps"
