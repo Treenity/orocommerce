@@ -51,6 +51,7 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
         apt-utils \
         build-essential patch \
         vim \
+        unzip \
         git \
         curl \
         openssh-client \
