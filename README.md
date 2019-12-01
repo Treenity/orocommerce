@@ -94,6 +94,7 @@ parameters:
     web_backend_prefix: /admin
     session_handler: session.handler.native_file
     secret: 123456
+    installed: false
     assets_version: 481c48e7
     assets_version_strategy: time_hash
     message_queue_transport: dbal
