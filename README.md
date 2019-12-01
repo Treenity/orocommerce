@@ -1,12 +1,16 @@
 # Installation
 ## Informations
-volumes : /var/www/html
+* **volumes** : `/var/www/html`
+* **url**: _http://localhost_
+* **admin url**: _http://localhost/admin_
+* **user** : _johndoe@example.com_
+* **pass**: _admin1234_
 
 ## Lancement
 Lancer l'architecture :  
 ```docker-compose up -d```
 
-**Lors du premier lancement, une copie de OroCommerce sera déplacée dans /var/www/html si le fichier dev.json n'existe pas**
+**Lors du premier lancement, une copie de OroCommerce sera déplacée dans /var/www/html si le fichier package.lock n'existe pas**
 
 ## Premier lancement
 Lancez le bash dans le container :
@@ -24,11 +28,6 @@ Installation & dump des assets
 Quittez le bash du container en tapant : ```exit```
 
 à ce stade, vous devriez pouvoir accèder au site.
-* url: http://localhost
-* url admin: http://localhost/admin
-* user : johndoe@example.com
-* pass: admin1234
-
 ## Fichiers
 ### docker-compose.yml
 ```yaml
