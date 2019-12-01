@@ -10,7 +10,8 @@ fi
 
 if [[ ! -f "/var/www/html/dev.json" ]];then
     echo ">>> Installing OroCommerce from https://github.com/oroinc/orocommerce-application.git"
-    git clone https://github.com/oroinc/orocommerce-application.git /var/www/html
+    git clone https://github.com/oroinc/orocommerce-application.git /var/www/html/app
+    mv /var/www/html/app/* /var/www/html/
 
     if [[ -d "/var/www/html/var/cache" ]];then
         echo ">>> cleaning /var/www/html/var/cache"
