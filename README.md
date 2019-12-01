@@ -8,8 +8,8 @@ Lancer l'architecture :
 Lancez le bash dans le container :
 ```docker exec -it oro_webserver bash```
 
-Puis tapez
-```composer install```
+Installez les dépendances composer:
+```composer install --optimize-autoloader```
 
 suivi de l'installation OroCommerce:  
 ```php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/```
