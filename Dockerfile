@@ -94,7 +94,8 @@ RUN pecl install -o -f xdebug redis imagick && \
 # Add composer
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/ && \
-    ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
+    ln -s /usr/local/bin/composer.phar /usr/local/bin/composer && \
+    composer global require hirak/prestissimo
 
 # Install custom apache conf
 COPY etc/apache2/sites-available/ /etc/apache2/sites-available/
@@ -104,11 +105,9 @@ COPY orocommerce/config/parameters.yml /tmp/oro-parameters.yml
 
 RUN git clone -b ${ORO_VERSION} https://github.com/oroinc/orocommerce-application.git /tmp/orocommerce && \
     mv /tmp/oro-parameters.yml /tmp/orocommerce/config/parameters.yml && \
-    composer global require hirak/prestissimo && \
     composer install --no-interaction --no-suggest --no-dev --prefer-dist --working-dir /tmp/orocommerce && \
     rm -rf /tmp/orocommerce/.git && \
     chown www-data:www-data /tmp/orocommerce -R
-
 
 EXPOSE 80 443 8080
 
