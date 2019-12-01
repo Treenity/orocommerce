@@ -68,7 +68,7 @@ RUN a2enmod rewrite \
     && docker-php-source extract \
     && docker-php-ext-enable redis imagick \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install -j$(nproc) zip tidy json bcmath ctype curl mysqli exif soap mbstring intl iconv pdo pdo_pgsql pdo_mysql sockets xml xmlrpc \
+    && docker-php-ext-install -j$(nproc) opcache zip tidy json bcmath ctype curl mysqli exif soap mbstring intl iconv pdo pdo_pgsql pdo_mysql sockets xml xmlrpc \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-configure intl \
     && docker-php-ext-install -j$(nproc) gd \
