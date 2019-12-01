@@ -108,6 +108,8 @@ RUN git clone -b ${ORO_VERSION} https://github.com/oroinc/orocommerce-applicatio
 
 COPY orocommerce/config/parameters.yml /tmp/orocommerce/config/parameters.yml
 
+EXPOSE 80 443 8080
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["/usr/bin/supervisord"]
