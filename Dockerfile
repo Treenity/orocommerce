@@ -4,7 +4,7 @@ MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV ORO_VERSION="4.0.0"
+ENV ORO_VERSION="4.0.0" \
     NOTVISIBLE="in users profile" \
     APACHE_RUN_USER=www-data \
     APACHE_RUN_GROUP=www-data \
