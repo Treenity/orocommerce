@@ -31,47 +31,48 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update -qq \
     && apt-get install -yqq \
-    libfreetype6-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libmcrypt-dev \
-    libicu-dev \
-    libxml2-dev \
-    libsasl2-modules \
-    libtidy-dev \
-    libcurl4-gnutls-dev \
-    libpq-dev \
-    libmagickwand-dev libmagickcore-dev \
-    mariadb-client \
+        libfreetype6-dev \
+        libpng-dev \
+        libjpeg-dev \
+        libmcrypt-dev \
+        libicu-dev \
+        libxml2-dev \
+        libsasl2-modules \
+        libtidy-dev \
+        libcurl4-gnutls-dev \
+        libpq-dev \
+        libmagickwand-dev libmagickcore-dev \
+        libc-client-dev libkrb5-dev \
+        mariadb-client \
     && apt-get install -y --no-install-recommends \
-    apt-utils \
-    build-essential patch \
-    python-certbot-apache -t jessie-backports \
-    vim \
-    git \
-    curl \
-    openssh-client \
-    cron \
-    supervisor \
-    rsync \
-    nodejs \
-    npm \
-    yarn
-
-RUN a2enmod rewrite \
-       deflate \
-       headers \
-       expires \
-       ssl \
-       actions \
+        apt-utils \
+        build-essential patch \
+        python-certbot-apache -t jessie-backports \
+        vim \
+        git \
+        curl \
+        openssh-client \
+        cron \
+        supervisor \
+        rsync \
+        nodejs \
+        npm \
+        yarn \
+    && a2enmod rewrite \
+        deflate \
+        headers \
+        expires \
+        ssl \
+        actions \
     && pecl install -o -f xdebux redis imagick \
     && docker-php-source extract \
     && docker-php-ext-enable redis imagick \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install -j$(nproc) opcache zip tidy json bcmath ctype curl mysqli exif soap mbstring intl iconv pdo pdo_pgsql pdo_mysql sockets xml xmlrpc \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install -j$(nproc) gd imap \
     && docker-php-source delete \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
     && docker-php-source delete \
