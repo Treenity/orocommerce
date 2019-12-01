@@ -15,7 +15,8 @@ ENV NOTVISIBLE="in users profile" \
     APACHE_SERVERNAME=localhost \
     APACHE_DOCUMENTROOT=/var/www/html/public \
     COMPOSER_ALLOW_SUPERUSER=1 \
-    TZ=Europe/Paris
+    TZ=Europe/Paris \
+    COMPOSER_MEMORY_LIMIT=-1
 
 # Config files
 COPY conf.d $PHP_INI_DIR/conf.d/
