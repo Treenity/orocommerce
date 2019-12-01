@@ -72,7 +72,7 @@ RUN a2enmod rewrite \
         actions
 
 # Install php libraries
-RUN pecl install -o -f xdebux redis imagick \
+RUN pecl install -o -f xdebug redis imagick \
     && docker-php-source extract \
     && docker-php-ext-enable redis imagick \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
