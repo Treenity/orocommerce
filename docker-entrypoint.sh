@@ -2,13 +2,13 @@
 set -euo pipefail
 
 # If OroCommerce is installed but need dump
-if [[ -f "/var/www/html/dev.json" && ! -f "/var/www/html/public/media/js/frontend_routes.json" ]];then
+if [[ -f "/var/www/html/package.lock" && ! -f "/var/www/html/public/media/js/frontend_routes.json" ]];then
     echo ">>> Running console dumps"
     php /var/www/html/bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build && php bin/console --env=prod assetic:dump
     echo ">>> OroCommerce should be running now"
 fi
 
-if [[ ! -f "/var/www/html/dev.json" ]];then
+if [[ ! -f "/var/www/html/package.lock" ]];then
     echo ">>> Installing OroCommerce"
     cp -R /tmp/orocommerce/* /var/www/html/
 
