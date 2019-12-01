@@ -105,7 +105,7 @@ parameters:
     websocket_bind_address: 0.0.0.0
     websocket_bind_port: 8080
     websocket_frontend_host: '*'
-    websocket_frontend_port: 8080
+    websocket_frontend_port: 8088
     websocket_frontend_path: ''
     websocket_backend_host: '*'
     websocket_backend_port: 8080
