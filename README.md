@@ -6,30 +6,40 @@
 * **user** : _johndoe@example.com_
 * **pass**: _admin1234_
 
-## Lancement
-Lancer l'architecture :  
-```docker-compose up -d```
+## Lancement 
+Lancer l'architecture via le fichier [docker-compose.yml](https://raw.githubusercontent.com/Treenity/orocommerce/master/docker-compose.yml) :  
+```bash
+docker-compose up -d
+```
 
 **Lors du premier lancement, une copie de OroCommerce sera déplacée dans /var/www/html si le fichier package.lock n'existe pas**
 
 ## Premier lancement
-Lancez le bash dans le container :
-```docker exec -it oro_webserver bash```
+**Lancez le bash dans le container :**  
+```bash
+docker exec -it oro_webserver bash
+```
 
-Installez les dépendances composer (seulement si vous avez besoin des dépendances dev):
-```composer install --optimize-autoloader```
+**Installez les dépendances composer (seulement si vous avez besoin des dépendances dev) :**  
+```bash
+composer install --optimize-autoloader
+```
 
-Installation OroCommerce:  
-```php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/```
+**Installation OroCommerce :**  
+```bash
+php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/
+```
 
-Installation & dump des assets  
-```php bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod assetic:dump && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build```
+**Installation & dump des assets :**  
+```bash
+php bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod assetic:dump && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build
+```
 
 Quittez le bash du container en tapant : ```exit```
 
 à ce stade, vous devriez pouvoir accèder au site.
 ## Fichiers
-### docker-compose.yml
+### [docker-compose.yml](https://raw.githubusercontent.com/Treenity/orocommerce/master/docker-compose.yml)
 ```yaml
 version: "2"
 services:
@@ -75,7 +85,7 @@ volumes:
   mysql:
     driver: local
 ```
-### parameters.yml example
+### [config/parameters.yml](https://raw.githubusercontent.com/Treenity/orocommerce/master/orocommerce/config/parameters.yml)
 ```yaml
 # This file is auto-generated during the composer install
 parameters:
