@@ -54,6 +54,7 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
     cron \
     supervisor \
     rsync \
+    nodejs \
     yarn
 
 RUN a2enmod rewrite \
