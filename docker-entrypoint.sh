@@ -9,25 +9,21 @@ if [[ -f "/var/www/html/dev.json" && ! -f "/var/www/html/public/media/js/fronten
 fi
 
 if [[ ! -f "/var/www/html/dev.json" ]];then
-    echo ">>> Installing OroCommerce from https://github.com/oroinc/orocommerce-application.git"
-    git clone https://github.com/oroinc/orocommerce-application.git /var/www/html/.orocommerce-tmp
-    cd /var/www/html/.orocommerce-tmp/ && git checkout tags/${ORO_VERSION} && cd ..
-    mv /var/www/html/.orocommerce-tmp/* /var/www/html/ && rm -rf /var/www/html/.orocommerce-tmp
+    echo ">>> Installing OroCommerce"
+    cp -R /tmp/orocommerce/* /var/www/html/
 
-    if [[ -d "/var/www/html/var/cache" ]];then
-        echo ">>> cleaning /var/www/html/var/cache"
-        rm -rf /var/www/html/var/cache
-    fi
-
-    echo "**********************************"
-    echo "run :"
-    echo "docker exec -it oro_webserver bash"
+    echo "****************************************"
+    echo "run : docker exec -it oro_webserver bash"
+    echo "****************************************"
     echo "then :"
-    echo "composer install"
-    echo "You should be asked for parameters.yml settup"
+    echo "composer install --optimize-autoloader"
+    echo ""
+    echo "You should then be asked for parameters.yml setup"
+    echo ""
+    echo "then launch install commands:"
     echo "php /var/www/html/bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/"
     echo "php /var/www/html/bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build && php bin/console --env=prod assetic:dump"
-    echo "**********************************"
+    echo "****************************************"
 fi
 
 # Enable xdebug
