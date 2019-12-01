@@ -12,7 +12,7 @@ Lancer l'architecture via le fichier [docker-compose.yml](https://raw.githubuser
 docker-compose up -d
 ```
 
-**Lors du premier lancement, une copie de OroCommerce sera déplacée dans /var/www/html si le fichier package.lock n'existe pas**
+**Lors du premier lancement, une copie de OroCommerce sera déplacée dans /var/www/html si le fichier composer.lock n'existe pas**
 
 ## Premier lancement
 **Lancez le bash dans le container :**  
