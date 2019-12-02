@@ -32,7 +32,7 @@ php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-da
 
 **Installation & dump des assets :**  
 ```bash
-php bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod assetic:dump && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build
+php bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build
 ```
 
 Quittez le bash du container en tapant : ```exit```
