@@ -1,10 +1,13 @@
 # Installation
 ## Informations
 * **volumes** : `/var/www/html`
-* **url**: _http://localhost_
-* **admin url**: _http://localhost/admin_
+* **url**: _http(s)://localhost_
+* **admin url**: _http(s)://localhost/admin_
 * **user** : _johndoe@example.com_
 * **pass**: _admin1234_
+
+## SSL/HTTPS
+Dans chrome : `chrome://flags/#allow-insecure-localhost` et activez l'accès aux sites "non verifiés"
 
 ## Lancement 
 Lancer l'architecture via le fichier [docker-compose.yml](https://raw.githubusercontent.com/Treenity/orocommerce/master/docker-compose.yml) :  
@@ -57,6 +60,7 @@ services:
       - mailhog
     ports:
       - "80:80"
+      - "443:443"
       - "8088:8080"
     volumes:
       - "./:/var/www/html"

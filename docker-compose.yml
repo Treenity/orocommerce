@@ -10,6 +10,7 @@ services:
       - mailhog
     ports:
       - "80:80"
+      - "443:443"
       - "8088:8080"
     volumes:
       - "./:/var/www/html"

@@ -71,7 +71,8 @@ RUN a2enmod rewrite \
         expires \
         ssl \
         http2 \
-        actions
+        actions && \
+        a2ensite default-ssl
 
 # Install php libraries
 RUN pecl install -o -f xdebug redis imagick && \
@@ -98,8 +99,9 @@ RUN curl -sS https://getcomposer.org/installer | php && \
     ln -s /usr/local/bin/composer.phar /usr/local/bin/composer && \
     composer global require hirak/prestissimo
 
-# Install custom apache conf
+# Install custom apache conf & ssl
 COPY etc/apache2/sites-available/ /etc/apache2/sites-available/
+COPY etc/apache2/ssl/ /etc/apache2/ssl/
 
 # Install OroCommerce
 COPY orocommerce/config/parameters.yml /tmp/oro-parameters.yml
