@@ -20,9 +20,9 @@ ENV ORO_VERSION="4.0.0" \
     COMPOSER_MEMORY_LIMIT=-1
 
 # Config files
-COPY conf.d $PHP_INI_DIR/conf.d/
-COPY supervisor /etc/supervisor/conf.d/
-COPY docker-entrypoint.sh /
+COPY ./etc/php/conf.d $PHP_INI_DIR/conf.d/
+COPY ./etc/supervisor/conf.d /etc/supervisor/conf.d/
+COPY ./docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 
 # Install deps
@@ -53,8 +53,7 @@ RUN apt-get update -qq && apt-get install -yqq software-properties-common gnupg 
         cron \
         supervisor \
         rsync \
-        python-certbot-apache && \
-        mkdir /etc/apache2/ssl/
+        python-certbot-apache
 
 # Install nodejs 12
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -101,8 +100,8 @@ RUN curl -sS https://getcomposer.org/installer | php && \
     composer global require hirak/prestissimo
 
 # Install custom apache conf & ssl
-COPY etc/apache2/sites-available/ /etc/apache2/sites-available/
-COPY etc/apache2/ssl/ /etc/apache2/ssl/
+COPY ./etc/apache2/sites-available /etc/apache2/sites-available/
+COPY ./etc/apache2/ssl /etc/apache2/ssl/
 
 # Install OroCommerce
 COPY orocommerce/config/parameters.yml /tmp/oro-parameters.yml
