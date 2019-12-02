@@ -10,7 +10,7 @@ fi
 
 if [[ ! -f "/var/www/html/composer.lock" ]];then
     echo ">>> Installing OroCommerce ..."
-    cp -R /tmp/orocommerce/* /var/www/html/
+    mv /tmp/orocommerce/* /var/www/html/
     echo ">>> Files copied"
     echo ""
     echo "****************************************"
