@@ -9,9 +9,10 @@ if [[ -f "/var/www/html/composer.lock" && ! -f "/var/www/html/public/media/js/fr
 fi
 
 if [[ ! -f "/var/www/html/composer.lock" ]];then
-    echo ">>> Installing OroCommerce"
+    echo ">>> Installing OroCommerce ..."
     cp -R /tmp/orocommerce/* /var/www/html/
-
+    echo ">>> Files copied"
+    echo ""
     echo "****************************************"
     echo "run : docker exec -it oro_webserver bash"
     echo "****************************************"
