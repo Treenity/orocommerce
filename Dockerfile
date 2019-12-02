@@ -70,6 +70,7 @@ RUN a2enmod rewrite \
         headers \
         expires \
         ssl \
+        http2 \
         actions
 
 # Install php libraries
