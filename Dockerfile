@@ -77,11 +77,11 @@ RUN pecl install -o -f xdebug redis imagick && \
     docker-php-source extract && \
     docker-php-ext-enable redis imagick && \
     docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
-    docker-php-ext-install -j$(nproc) opcache zip tidy json bcmath ctype curl mysqli exif soap mbstring intl iconv pdo pdo_pgsql pdo_mysql sockets xml xmlrpc && \
+    docker-php-ext-install -j$(nproc) opcache zip tidy json bcmath ctype curl mysqli exif soap mbstring iconv pdo pdo_pgsql pdo_mysql sockets xml xmlrpc && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-configure intl && \
-    docker-php-ext-install -j$(nproc) gd imap && \
+    docker-php-ext-install intl gd imap && \
     docker-php-source delete && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
     # Clean tmp directories
