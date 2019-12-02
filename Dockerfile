@@ -64,6 +64,55 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
         nodejs \
         yarn
 
+# Add composer
+RUN curl -sS https://getcomposer.org/installer | php && \
+    mv composer.phar /usr/local/bin/ && \
+    ln -s /usr/local/bin/composer.phar /usr/local/bin/composer && \
+    composer global require hirak/prestissimo
+
+# Install php libraries
+RUN pecl install -o -f xdebug redis imagick && \
+    docker-php-source extract && \
+    docker-php-ext-enable redis imagick && \
+    docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
+    docker-php-ext-configure intl && \
+    docker-php-ext-install -j$(nproc) \
+        intl \
+        gd \
+        imap \
+        opcache \
+        zip \
+        tidy \
+        json \
+        bcmath \
+        ctype \
+        curl \
+        mysqli \
+        exif \
+        soap \
+        mbstring \
+        iconv \
+        pdo \
+        pdo_pgsql \
+        pdo_mysql \
+        sockets \
+        xml \
+        xmlrpc && \
+    docker-php-source delete && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
+    # Clean tmp directories
+    docker-php-source delete && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /tmp/pear/* && \
+    # Set server tokens for prod mod
+    sed -i 's/ServerTokens .*/ServerTokens Prod/' /etc/apache2/conf-available/security.conf && \
+    sed -i 's/ServerSignature .*/ServerSignature Off/' /etc/apache2/conf-available/security.conf
+
+# Install custom apache conf & ssl
+COPY ./etc/apache2/sites-available /etc/apache2/sites-available/
+
 # Active apache mods
 RUN a2enmod rewrite \
         deflate \
@@ -74,33 +123,6 @@ RUN a2enmod rewrite \
         actions && \
         a2ensite default-ssl
 
-# Install php libraries
-RUN pecl install -o -f xdebug redis imagick && \
-    docker-php-source extract && \
-    docker-php-ext-enable redis imagick && \
-    docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
-    docker-php-ext-install -j$(nproc) opcache zip tidy json bcmath ctype curl mysqli exif soap mbstring iconv pdo pdo_pgsql pdo_mysql sockets xml xmlrpc && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
-    docker-php-ext-configure intl && \
-    docker-php-ext-install intl gd imap && \
-    docker-php-source delete && \
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-    # Clean tmp directories
-    docker-php-source delete && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /tmp/pear/* && \
-    sed -i 's/ServerTokens .*/ServerTokens Prod/' /etc/apache2/conf-available/security.conf && \
-    sed -i 's/ServerSignature .*/ServerSignature Off/' /etc/apache2/conf-available/security.conf
-
-# Add composer
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/ && \
-    ln -s /usr/local/bin/composer.phar /usr/local/bin/composer && \
-    composer global require hirak/prestissimo
-
-# Install custom apache conf & ssl
-COPY ./etc/apache2/sites-available /etc/apache2/sites-available/
 COPY ./etc/apache2/ssl /etc/apache2/ssl/
 
 # Install OroCommerce
