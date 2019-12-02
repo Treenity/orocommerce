@@ -35,9 +35,9 @@ php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-da
 php bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build
 ```
 
-**Relancer les services**
+**Relancer les services du serveur et sortir du shell**
 ```bash
-supervisorctl restart all
+supervisorctl restart all && exit
 ```
 _PS: cela vous sortira du shell du container_
 
