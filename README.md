@@ -35,7 +35,11 @@ php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-da
 php bin/console --env=prod fos:js-routing:dump && php bin/console --env=prod oro:localization:dump && php bin/console --env=prod oro:assets:install && php bin/console --env=prod oro:translation:dump && php bin/console --env=prod oro:requirejs:build
 ```
 
-Quittez le bash du container en tapant : ```exit```
+**Relancer les services**
+```bash
+supervisorctl restart all
+```
+_PS: cela vous sortira du shell du container_
 
 à ce stade, vous devriez pouvoir accèder au site.
 ## Fichiers
