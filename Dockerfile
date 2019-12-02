@@ -53,7 +53,8 @@ RUN apt-get update -qq && apt-get install -yqq software-properties-common gnupg 
         cron \
         supervisor \
         rsync \
-        python-certbot-apache
+        python-certbot-apache && \
+        mkdir /etc/apache2/ssl/
 
 # Install nodejs 12
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
