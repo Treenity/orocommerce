@@ -26,9 +26,8 @@ COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 
 # Install deps
-RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main' >> /etc/apt/sources.list && \
-    apt-get update -qq && \
-    apt-get install -yq gnupg apt-transport-https && \
+RUN apt-get update -qq && apt-get install -yqq software-properties-common gnupg apt-transport-https && \
+    add-apt-repository main && \
     apt-get update -qq && \
     apt-get install -yqq \
         libfreetype6-dev \
@@ -53,7 +52,8 @@ RUN echo 'deb [check-valid-until=no] http://archive.debian.org/debian jessie-bac
         openssh-client \
         cron \
         supervisor \
-        rsync
+        rsync \
+        python-certbot-apache
 
 # Install nodejs 12
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
