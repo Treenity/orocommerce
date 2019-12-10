@@ -29,6 +29,8 @@ composer install --optimize-autoloader
 ```
 
 **Installation OroCommerce :**  
+Ajoutez `--sample-data` si vous souhaitez des données de démonstration
+
 ```bash
 php bin/console --env=prod oro:install --no-interaction --timeout 3600 --drop-database --user-name=admin --user-firstname=John --user-lastname=Doe --user-password=admin1234 --user-email=johndoe@example.com --organization-name=Acme --application-url=http://localhost/
 ```
